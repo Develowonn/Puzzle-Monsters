@@ -37,10 +37,11 @@ public class WaveEditor : EditorWindow
 
 	private void OnEnable()
 	{
-		waves        = new List<WaveData>();	
-		waveFoldouts = new List<bool>();
+		waves              = new List<WaveData>();	
+		waveFoldouts       = new List<bool>();
 
 		editorDefaultColor = GUI.backgroundColor;
+		LoadWaveDataFromJson();
 	}
 
 	private void OnGUI()
@@ -160,7 +161,7 @@ public class WaveEditor : EditorWindow
 			GUI.backgroundColor = Color.yellow;
 			if (GUILayout.Button("Export Json"))
 			{
-				string json = JsonConvert.SerializeObject(waves);
+				string json = JsonConvert.SerializeObject(waves, Formatting.Indented);
 				string path = Path.Combine(Application.dataPath, jsonPath);
 
 				File.WriteAllText(path, json);
@@ -174,5 +175,13 @@ public class WaveEditor : EditorWindow
 			GUI.backgroundColor = editorDefaultColor;
 			GUILayout.EndHorizontal();
 		}
+	}
+
+	private void LoadWaveDataFromJson()
+	{
+		TextAsset wavesTextAsset = Resources.Load<TextAsset>("Json/Waves");
+		string    json           = wavesTextAsset.text;
+
+		waves = JsonConvert.DeserializeObject<List<WaveData>>(json);
 	}
 }

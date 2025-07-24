@@ -1,1 +1,50 @@
-[{"pointSpawnDatas":[{"type":0,"monsterCount":0},{"type":0,"monsterCount":0},{"type":0,"monsterCount":0},{"type":0,"monsterCount":0},{"type":0,"monsterCount":0}]}]
+[
+  {
+    "pointSpawnDatas": [
+      {
+        "type": 1,
+        "monsterCount": 1
+      },
+      {
+        "type": 4,
+        "monsterCount": 1
+      },
+      {
+        "type": 0,
+        "monsterCount": 0
+      },
+      {
+        "type": 0,
+        "monsterCount": 0
+      },
+      {
+        "type": 0,
+        "monsterCount": 0
+      }
+    ]
+  },
+  {
+    "pointSpawnDatas": [
+      {
+        "type": 4,
+        "monsterCount": 1
+      },
+      {
+        "type": 1,
+        "monsterCount": 1
+      },
+      {
+        "type": 3,
+        "monsterCount": 1
+      },
+      {
+        "type": 0,
+        "monsterCount": 0
+      },
+      {
+        "type": 0,
+        "monsterCount": 0
+      }
+    ]
+  }
+]
