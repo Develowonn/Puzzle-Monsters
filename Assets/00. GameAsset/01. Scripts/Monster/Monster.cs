@@ -1,13 +1,24 @@
+// # System
+using System;
+
 // # Unity
 using UnityEngine;
 
 // # Etc
 using Cysharp.Threading.Tasks;
 
+[RequireComponent(typeof(MonsterAI))]
 public class Monster : Character
 {
+    [SerializeField]
+    private float     attackRange;
+    [SerializeField]
+    private float     attackCooltime;
+    private bool      isAttack;
+
     private int       hashIsRun;
 
+    private Player    player;
     private MonsterAI monsterAI;
     private Animator  animator;
 
@@ -21,8 +32,11 @@ public class Monster : Character
 
     private void Start()
     {
-        // Monster Ai 설정
-        monsterAI.Initialize(this, new AStartPathFinder());
+        isAttack = true;
+		player   = InGameManager.Instance.GetPlayerTransform().GetComponent<Player>();
+
+		// Monster Ai 설정
+		monsterAI.Initialize(this, new AStartPathFinder());
         
         // 규칙에 맞게 움직이도록 실행
         HandleMovementLoopAsync().Forget();
@@ -30,8 +44,11 @@ public class Monster : Character
 
     private void Update()
     {
+        if(player.IsDie) return;
+
         UpdateRunAnimation();
         UpdateSpriteX();
+        TryAttackPlayer();
     }
 
     private async UniTaskVoid HandleMovementLoopAsync()
@@ -77,6 +94,20 @@ public class Monster : Character
 
     private void TryAttackPlayer()
     {
+        float distanceSqr = (InGameManager.Instance.GetPlayerTransform().position - transform.position).sqrMagnitude;
 
+        if (isAttack && distanceSqr <= attackRange)
+        {
+            isAttack = false;
+
+            player.TakeDamage();
+            WaitForAttackCooltime().Forget();
+        }
+    }
+
+    private async UniTaskVoid WaitForAttackCooltime()
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(attackCooltime));
+        isAttack = true;
     }
 }

@@ -28,7 +28,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (player.IsDie) return;
+        if (player.IsDie)
+        {
+            movementDirection = Vector3.zero;
+            return;
+        }
 
         UpdateMovementDirection();
         UpdateRunAnimation();
@@ -58,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // 대각선으로 움직이는걸 방지하고, 입력 우선순위를 정함 
         // 우선순위 : 위 -> 아래 -> 왼쪽 -> 오른쪽
-        if (Input.GetKey(KeyCode.W)) movementDirection = Vector3.up;
+        if      (Input.GetKey(KeyCode.W)) movementDirection = Vector3.up;
         else if (Input.GetKey(KeyCode.S)) movementDirection = Vector3.down;
         else if (Input.GetKey(KeyCode.A)) movementDirection = Vector3.left;
         else if (Input.GetKey(KeyCode.D)) movementDirection = Vector3.right;
