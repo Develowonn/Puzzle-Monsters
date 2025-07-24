@@ -1,0 +1,27 @@
+tadpole_bell.png
+size:256,256
+filter:Linear,Linear
+pma:true
+scale:0.25
+꼬리
+bounds:94,75,62,43
+rotate:90
+꼬리2
+bounds:94,30,62,43
+꼬리3
+bounds:2,2,62,43
+발1
+bounds:66,19,22,26
+발2
+bounds:139,115,22,26
+rotate:90
+방울
+bounds:2,136,87,90
+방울2
+bounds:2,47,87,90
+rotate:90
+방울3
+bounds:91,139,87,90
+rotate:90
+타원 1
+bounds:139,95,58,18

@@ -1,7 +1,3 @@
-// # System
-using System.Collections.Generic;
-
-
 // # Unity
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -21,7 +17,7 @@ public class GameManager : Singleton<GameManager>
 	[SerializeField]
 	private float		repathInterval;
 
-	public bool[,]	    WallMap { get; private set; }
+	public  bool[,]	    WallMap { get; private set; }
 
 	private Node[,]     grid;
 	private int		    sizeX;
@@ -36,8 +32,8 @@ public class GameManager : Singleton<GameManager>
 		sizeY = topRight.y - bottomLeft.y + 1;
 
 		InitializeWallMap();
-		InitializeGrid();
-	}
+        InitializeGrid();
+    }
 
 	private void InitializeWallMap()
 	{
@@ -49,10 +45,10 @@ public class GameManager : Singleton<GameManager>
 			{
 				Vector3Int tilePosition = new Vector3Int(x, y, 0);
 
-				if (wallTileMap.HasTile(tilePosition))
-				{
-					WallMap[x - wallTileMap.cellBounds.xMin, y - wallTileMap.cellBounds.yMin] = true;
-				}
+                if (wallTileMap.HasTile(tilePosition))
+                {
+                    WallMap[x + (-wallTileMap.cellBounds.xMin), y + (-wallTileMap.cellBounds.yMin)] = true;
+                }
 			}
 		}
 	}
@@ -61,9 +57,9 @@ public class GameManager : Singleton<GameManager>
 	{
 		grid = new Node[sizeX, sizeY];
 
-		for(int x = 0; x < sizeX; x++)
+		for (int x = 0; x < sizeX; x++)
 		{
-			for(int y = 0; y < sizeY; y++)
+			for (int y = 0; y < sizeY; y++)
 			{
 				grid[x, y] = new Node(WallMap[x, y], new Vector2Int(x, y));
 			}
@@ -88,9 +84,15 @@ public class GameManager : Singleton<GameManager>
 		return new Vector2Int(x, y);
 	}
 
-	public Vector3 NodeToWorld(Vector2Int pos)
-	{
-		// 0.5f 를 더하는 이유는 노드의 중심에서 움직일 수 있게 
-		return new Vector3(pos.x * 1.0f, pos.y * 1.0f, 0);
-	}
+	public bool IsWallAtPosition(Vector3 pos)
+    {
+		Vector2Int nodePos = WorldToNode(pos);
+
+		// 범위를 벗어날 경우 벽으로 판단 
+		if (nodePos.x < 0 || nodePos.x > sizeX - 1
+		||  nodePos.y < 0 || nodePos.y > sizeY - 1)
+			return true;
+
+		return grid[nodePos.x, nodePos.y].isWall;
+    }
 }

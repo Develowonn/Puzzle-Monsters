@@ -1,6 +1,3 @@
-// # System
-using System.Collections;
-
 // # Unity
 using UnityEngine;
 
@@ -9,58 +6,77 @@ using Cysharp.Threading.Tasks;
 
 public class Monster : Character
 {
-	[SerializeField]
-	private float       movementTime;
+    private int       hashIsRun;
 
-	public  bool		IsMove { get; private set; }
+    private MonsterAI monsterAI;
+    private Animator  animator;
 
-	private MonsterAI	monsterAI;
+    private void Awake()
+    {
+        monsterAI = GetComponent<MonsterAI>();
+        animator  = GetComponent<Animator>();
 
-	private void Awake()
-	{
-		monsterAI = GetComponent<MonsterAI>();
-	}
+        hashIsRun = Animator.StringToHash("IsRun");
+    }
 
-	private void Start()
-	{
-		StartMovingAsync().Forget();
-	}
+    private void Start()
+    {
+        // Monster Ai 설정
+        monsterAI.Initialize(this, new AStartPathFinder());
+        
+        // 규칙에 맞게 움직이도록 실행
+        HandleMovementLoopAsync().Forget();
+    }
 
-	private async UniTaskVoid StartMovingAsync()
-	{
-		while (true)
-		{
-			if (monsterAI.GetTargetNodePosition() != Vector2Int.zero)
-			{
-				Vector3 end = (Vector3Int)monsterAI.GetTargetNodePosition();
+    private void Update()
+    {
+        UpdateRunAnimation();
+        UpdateSpriteX();
+    }
 
-				await MoveSmoothGrid(end);
-				
-				monsterAI.MoveNextNode();
-			}
+    private async UniTaskVoid HandleMovementLoopAsync()
+    {
+        // 객체가 삭제될 경우 비동기 함수도 종료
+        var token = this.GetCancellationTokenOnDestroy();
 
-			await UniTask.Yield();
-		}
-	}
+        while (!token.IsCancellationRequested)
+        {
+            if (monsterAI != null && monsterAI.HasPath())
+            {
+                Vector3 end = (Vector3Int)monsterAI.GetTargetNodePosition();
+                await MoveSmoothGrid(end);
+                monsterAI.MoveNextNode();
+            }
+            await UniTask.Yield();
+        }
+    }
 
-	private async UniTask MoveSmoothGrid(Vector3 end)
-	{
-		IsMove = true;
+    private void UpdateRunAnimation()
+    {
+        if (!animator.GetBool(hashIsRun) && IsMove)
+        {
+            animator.SetBool(hashIsRun, true);
+        }
+        else if (animator.GetBool(hashIsRun) && !IsMove)
+        {
+            animator.SetBool(hashIsRun, false);
+        }
+    }
 
-		Vector3 start = transform.position;
-		float current = 0;
-		float percent = 0;
+    private void UpdateSpriteX()
+    {
+        if(transform.position.x > InGameManager.Instance.GetPlayerTransform().position.x)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else 
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+    }
 
-		while (percent < 1.0f)
-		{
-			current += Time.deltaTime;
-			percent  = current / movementTime;
+    private void TryAttackPlayer()
+    {
 
-			transform.position = Vector3.Lerp(start, end, percent);
-
-			await UniTask.Yield();
-		}
-
-		IsMove = false;
-	}
+    }
 }

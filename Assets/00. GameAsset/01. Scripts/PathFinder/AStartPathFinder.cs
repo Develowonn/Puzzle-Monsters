@@ -84,8 +84,8 @@ public class AStartPathFinder : IPathFinder
 
 	private List<Node> ReconstructPath(Node startNode, Node targetNode)
 	{
-		List<Node> path        = new List<Node>();
-		Node	   currentNode = targetNode;
+		List<Node> path = new List<Node>();
+		Node currentNode = targetNode;
 
 		while(currentNode != startNode)
 		{

@@ -1,0 +1,56 @@
+oni_samurai_boss.png
+size:512,512
+filter:Linear,Linear
+pma:true
+scale:0.25
+다리1
+bounds:154,318,22,28
+다리12
+bounds:154,288,22,28
+다리13
+bounds:154,258,22,28
+다리2
+bounds:154,228,22,28
+다리22
+bounds:154,198,22,28
+다리23
+bounds:105,124,22,28
+리본
+bounds:348,327,78,56
+리본2
+bounds:154,118,78,56
+rotate:90
+리본3
+bounds:47,74,78,56
+rotate:90
+모자2
+bounds:2,348,192,150
+모자22
+bounds:196,306,192,150
+rotate:90
+모자23
+bounds:2,154,192,150
+rotate:90
+칼 복사
+bounds:178,211,93,113
+rotate:90
+칼 복사2
+bounds:293,191,93,113
+칼 복사3
+bounds:348,385,93,113
+타원 1
+bounds:2,61,91,43
+rotate:90
+팔2 복사
+bounds:212,63,48,70
+팔2 복사2
+bounds:105,46,48,70
+팔2 복사3
+bounds:47,2,48,70
+팔방패
+bounds:212,135,48,74
+팔방패2
+bounds:262,141,48,74
+rotate:90
+팔방패3
+bounds:338,115,48,74

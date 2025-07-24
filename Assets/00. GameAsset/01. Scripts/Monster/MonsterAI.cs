@@ -13,42 +13,43 @@ public class MonsterAI : MonoBehaviour
 	
 	private Node[,]				 grid;
 	private PathGizmosRenderer   pathGizmosRenderer;
-	private Transform			 playerTransform;
 
-	private List<Node>			 currentPath;
+	private List<Node>			 currentPath	 = new List<Node>();
 	private int					 currentPathIndex;
 
 	private Monster				 monster;
 
-	private void Start()
-	{
-		pathFinder         = new AStartPathFinder();
-
+    private void Start()
+    {
 		pathGizmosRenderer = GetComponent<PathGizmosRenderer>();
-		monster			   = GetComponent<Monster>();
 
-		grid			   = GameManager.Instance.GetGrid();
-		repathInterval     = GameManager.Instance.GetRepathInterval();
-		playerTransform    = InGameManager.Instance.GetPlayerTransform();
-
-		UpdatePath();
+		grid			= GameManager.Instance.GetGrid();
+		repathInterval  = GameManager.Instance.GetRepathInterval();
+		repathTimer     = repathInterval;
 	}
 
-	private void Update()
+    private void Update()
 	{
-		repathTimer += Time.deltaTime;
+		if (pathFinder == null) return;
 
-		if (repathTimer > repathInterval && !monster.IsMove)
+		repathTimer += Time.deltaTime;
+		if (repathTimer >= repathInterval && !monster.IsMove)
 		{ 
 			repathTimer = 0.0f;
 			UpdatePath();
 		}
 	}
 
+	public void Initialize(Monster monster, IPathFinder pathFinder)
+    {
+		this.monster	   = monster;
+		this.pathFinder    = pathFinder;
+	}
+
 	private void UpdatePath()
 	{
 		Vector2Int startPos  = GameManager.Instance.WorldToNode(transform.position);
-		Vector2Int targetPos = GameManager.Instance.WorldToNode(playerTransform.position);
+		Vector2Int targetPos = GameManager.Instance.WorldToNode(InGameManager.Instance.GetPlayerTransform().position);
 
 		List<Node> path = pathFinder.FindPath(startPos, targetPos, grid);
 
@@ -63,21 +64,17 @@ public class MonsterAI : MonoBehaviour
 
 	public Vector2Int GetTargetNodePosition()
 	{
-		if(currentPath == null)
-		{
-			return Vector2Int.zero;
-		}
-
-		if (currentPathIndex > currentPath.Count)
-		{
-			return currentPath[currentPath.Count - 1].nodePosition;
-		}
-
 		return currentPath[currentPathIndex].nodePosition;
 	}
 
 	public void MoveNextNode()
 	{
-		currentPathIndex++;
+		if(currentPathIndex < currentPath.Count - 1)
+			currentPathIndex++;
 	}
+
+	public bool HasPath()
+    {
+		return currentPath.Count > 0;
+    }
 }

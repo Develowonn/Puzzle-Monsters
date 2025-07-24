@@ -1,0 +1,56 @@
+frog_lotus.png
+size:512,512
+filter:Linear,Linear
+pma:true
+scale:0.3
+개구리
+bounds:2,293,146,114
+개구리3
+bounds:150,261,146,114
+rotate:90
+눈가
+bounds:112,86,97,17
+rotate:90
+눈가 복사
+bounds:266,261,97,17
+눈가 복사 2
+bounds:266,280,97,17
+레이어 2
+bounds:2,151,140,108
+rotate:90
+레이어 22
+bounds:147,151,140,108
+레이어 23
+bounds:266,299,140,108
+발1
+bounds:96,37,54,47
+발2
+bounds:96,37,54,47
+발1색
+bounds:2,2,47,39
+rotate:90
+발1색2
+bounds:43,2,47,39
+rotate:90
+발1색3
+bounds:131,110,47,39
+발2색
+bounds:152,60,48,38
+rotate:90
+발2색2
+bounds:180,111,48,38
+발2색3
+bounds:192,61,48,38
+rotate:90
+연꽃봉
+bounds:289,61,98,92
+rotate:90
+연꽃봉 복사
+bounds:289,161,98,92
+rotate:90
+연꽃봉 복사 2
+bounds:2,51,98,92
+rotate:90
+타원 1
+bounds:112,185,106,33
+rotate:90

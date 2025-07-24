@@ -1,0 +1,28 @@
+yokai_shoes.png
+size:256,256
+filter:Linear,Linear
+pma:true
+scale:0.3
+레이어 10
+bounds:167,98,33,41
+rotate:90
+레이어 10 복사
+bounds:133,34,33,41
+rotate:90
+레이어 11
+bounds:167,78,18,31
+rotate:90
+레이어 11 복사
+bounds:108,113,18,31
+rotate:90
+레이어 9
+bounds:2,108,104,129
+레이어 92
+bounds:2,2,104,129
+rotate:90
+레이어 93
+bounds:108,133,104,129
+rotate:90
+타원 1
+bounds:141,69,62,24
+rotate:90

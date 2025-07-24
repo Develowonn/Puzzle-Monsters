@@ -1,0 +1,58 @@
+yokai_umbrella.png
+size:256,256
+filter:Linear,Linear
+pma:true
+scale:0.25
+레이어 10
+bounds:97,48,34,33
+레이어 102
+bounds:133,48,34,33
+레이어 103
+bounds:133,48,34,33
+레이어 12
+bounds:97,169,84,68
+rotate:90
+레이어 122
+bounds:2,94,84,68
+rotate:90
+레이어 123
+bounds:97,83,84,68
+rotate:90
+레이어 14
+bounds:42,24,26,41
+레이어 142
+bounds:136,20,26,41
+rotate:90
+레이어 143
+bounds:167,212,26,41
+레이어 2
+bounds:72,141,37,23
+rotate:90
+레이어 22
+bounds:72,102,37,23
+rotate:90
+레이어 23
+bounds:72,63,37,23
+rotate:90
+레이어 3
+bounds:70,8,19,19
+레이어 32
+bounds:167,191,19,19
+레이어 33
+bounds:167,170,19,19
+레이어 5
+bounds:2,180,93,73
+레이어 6
+bounds:92,15,31,42
+rotate:90
+레이어 8
+bounds:2,5,32,20
+레이어 82
+bounds:70,29,32,20
+rotate:90
+레이어 83
+bounds:36,2,32,20
+타원 1
+bounds:2,67,68,25
+타원 2
+bounds:2,27,38,38
