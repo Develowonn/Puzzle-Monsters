@@ -21,6 +21,19 @@ public class InGameManager : MonoBehaviour
 		aliveMonsterList = new List<Monster>();
 	}
 
+	private void Update()
+	{
+		InputDebugModeKey();
+	}
+
+	private void InputDebugModeKey()
+	{
+		if (Input.GetKeyDown(KeyCode.Q))
+		{
+			InGameUIManager.Instance.OnDebugMode();
+		}
+	}
+
     public Transform GetPlayerTransform()
 	{
 		return playerTransform;

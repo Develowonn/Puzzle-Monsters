@@ -16,12 +16,9 @@ public class MonsterPoolManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
-    }
 
-    private void Start()
-    {
-        Initialize();
-    }
+		Initialize();
+	}
 
     private void Initialize()
     {

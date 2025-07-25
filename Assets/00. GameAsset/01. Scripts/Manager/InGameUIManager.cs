@@ -32,6 +32,11 @@ public class InGameUIManager : MonoBehaviour
 	private TMP_Text		    waveText;
 	private int				    wave = 1;
 
+	[Header("Debug Mode UI")]
+	[SerializeField]
+	private Animator			debugAniamtor;
+	private int                 hashIsDebug;
+
 	private StringBuilder		waveStringBuilder;
 	private StringBuilder       timerStringBuilder;
 	private StringBuilder		aliveMonsterCountStringBuilder;
@@ -42,6 +47,8 @@ public class InGameUIManager : MonoBehaviour
 	{
 		if (Instance == null)
 			Instance = this;
+
+		hashIsDebug                    = Animator.StringToHash("IsDebug");
 
 		waveStringBuilder			   = new StringBuilder();
 		timerStringBuilder             = new StringBuilder();
@@ -92,4 +99,12 @@ public class InGameUIManager : MonoBehaviour
 
 		waveText.text = waveStringBuilder.ToString();
     }
+
+	public void OnDebugMode()
+	{
+		if(!debugAniamtor.GetBool(hashIsDebug))
+			debugAniamtor.SetBool(hashIsDebug, true);
+		else 
+			debugAniamtor.SetBool(hashIsDebug, false);
+	}
 }
