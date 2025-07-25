@@ -3,7 +3,6 @@ using System.Text;
 
 // # Unity
 using UnityEngine;
-using UnityEngine.UI;
 
 // # Etc
 using TMPro;
@@ -28,6 +27,12 @@ public class InGameUIManager : MonoBehaviour
 	private TMP_Text            timerText;
 	private float			    time;
 
+	[Header("Wave UI")]
+	[SerializeField]
+	private TMP_Text		    waveText;
+	private int				    wave = 1;
+
+	private StringBuilder		waveStringBuilder;
 	private StringBuilder       timerStringBuilder;
 	private StringBuilder		aliveMonsterCountStringBuilder;
 
@@ -38,6 +43,7 @@ public class InGameUIManager : MonoBehaviour
 		if (Instance == null)
 			Instance = this;
 
+		waveStringBuilder			   = new StringBuilder();
 		timerStringBuilder             = new StringBuilder();
 		aliveMonsterCountStringBuilder = new StringBuilder();
 	}
@@ -75,5 +81,15 @@ public class InGameUIManager : MonoBehaviour
 		aliveMonsterCountStringBuilder.Append($"{InGameManager.Instance.GetAliveMonsterCount()}");
 
 		aliveMonsterCountText.text = aliveMonsterCountStringBuilder.ToString();
+    }
+
+	public void UpdateWaveUI()
+    {
+		wave++;
+
+		waveStringBuilder.Clear();
+		waveStringBuilder.Append($"Wave {wave}");
+
+		waveText.text = waveStringBuilder.ToString();
     }
 }

@@ -1,3 +1,6 @@
+// # System
+using System.Collections.Generic;
+
 // # Unity
 using UnityEngine;
 
@@ -6,35 +9,37 @@ public class InGameManager : MonoBehaviour
 	public static InGameManager Instance { get; private set; }
 
 	[SerializeField]
-	private Transform  playerTransform;
-	[SerializeField]
-	private int		   aliveMonsterCount;
+	private Transform     playerTransform;
+
+	private List<Monster> aliveMonsterList;
 
 	private void Awake()
 	{
 		if(Instance == null)
 			Instance = this;
+
+		aliveMonsterList = new List<Monster>();
 	}
 
-	public Transform GetPlayerTransform()
+    public Transform GetPlayerTransform()
 	{
 		return playerTransform;
 	}
 
 	public int GetAliveMonsterCount()
     {
-		return aliveMonsterCount;
+		return aliveMonsterList.Count;
     }
 
-	public void IncreaseAliveMonsterCount()
+	public void AddAliveMonster(Monster monster)
     {
-		aliveMonsterCount++;
+		aliveMonsterList.Add(monster);
 		InGameUIManager.Instance.UpdateAliveMonsterCountUI();
     }
 
-	public void DecreaseAliveMonsterCount()
+	public void RemoveAliveMonster(Monster monster)
     {
-		aliveMonsterCount--;
+		aliveMonsterList.Remove(monster);
 		InGameUIManager.Instance.UpdateAliveMonsterCountUI();
 	}
 }

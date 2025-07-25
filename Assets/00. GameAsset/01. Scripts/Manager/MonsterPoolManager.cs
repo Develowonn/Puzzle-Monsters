@@ -66,7 +66,7 @@ public class MonsterPoolManager : MonoBehaviour
         result.transform.position = position;
         result.SetActive(true);
 
-        InGameManager.Instance.IncreaseAliveMonsterCount();
+        InGameManager.Instance.AddAliveMonster(result.GetComponent<Monster>());
 
         return result;
     }
@@ -79,7 +79,7 @@ public class MonsterPoolManager : MonoBehaviour
         obj.transform.SetParent(currentPool.parentTransform);
         currentPool.pool.Enqueue(obj);
 
-        InGameManager.Instance.DecreaseAliveMonsterCount();
+        InGameManager.Instance.RemoveAliveMonster(obj.GetComponent<Monster>());
     }
 
     private void Instantiate(MonsterPool pool)

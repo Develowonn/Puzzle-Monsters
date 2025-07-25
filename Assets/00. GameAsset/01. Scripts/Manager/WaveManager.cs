@@ -1,5 +1,4 @@
 // # System
-using System;
 using System.Collections.Generic;
 
 // # Unity
@@ -51,6 +50,7 @@ public class WaveManager : Singleton<WaveManager>
 	public void SetNextWaveData()
 	{
 		ChangeNextWave();
+		InGameUIManager.Instance.UpdateWaveUI();
 	}
 
 	private void ChangeNextWave()
