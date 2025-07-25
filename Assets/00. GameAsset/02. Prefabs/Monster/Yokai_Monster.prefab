@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 9031984541646252533}
   - component: {fileID: 2619513071975092437}
   - component: {fileID: 2775577534191201131}
+  - component: {fileID: -3063869270149469999}
   m_Layer: 0
   m_Name: Yokai_Monster
   m_TagString: Untagged
@@ -32,8 +33,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -165,6 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementTime: 0.35
+  monsterType: 4
   attackRange: 0.04
   attackCooltime: 1
 --- !u!114 &2775577534191201131
@@ -179,3 +181,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 825bcc3b63971754cb7e3b5ee866f2f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-3063869270149469999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2729576773457859632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c140c9f045661640a4e8cfecf6bba58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isGizmos: 0

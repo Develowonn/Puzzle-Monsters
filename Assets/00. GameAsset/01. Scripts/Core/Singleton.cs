@@ -1,7 +1,3 @@
-// # System
-using System.Collections;
-using System.Collections.Generic;
-
 // # Unity
 using UnityEngine;
 
@@ -29,7 +25,7 @@ public class Singleton<T> : MonoBehaviour where T : Component
 		}
 	}
 
-	public virtual void Awake()
+	protected virtual void Awake()
 	{
 		if (_instance == null)
 		{

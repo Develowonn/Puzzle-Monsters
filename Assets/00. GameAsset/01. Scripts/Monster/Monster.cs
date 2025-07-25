@@ -11,32 +11,43 @@ using Cysharp.Threading.Tasks;
 public class Monster : Character
 {
     [SerializeField]
+    private MonsterType monsterType;
+
+    [SerializeField] [Space(10)]
     private float     attackRange;
     [SerializeField]
     private float     attackCooltime;
-    private bool      isAttack;
 
+    private bool      isAttack;
     private int       hashIsRun;
 
     private Player    player;
-    private MonsterAI monsterAI;
     private Animator  animator;
+
+    private MonsterAI monsterAI;
+
 
     private void Awake()
     {
         monsterAI = GetComponent<MonsterAI>();
         animator  = GetComponent<Animator>();
-
         hashIsRun = Animator.StringToHash("IsRun");
     }
 
     private void Start()
     {
-        isAttack = true;
-		player   = InGameManager.Instance.GetPlayerTransform().GetComponent<Player>();
+        Initialize(InGameManager.Instance.GetPlayerTransform().GetComponent<Player>(),
+                   new AStartPathFinder(), movementTime);
+    }
+
+    private void Initialize(Player player, IPathFinder pathFinder, float movementTime)
+    {
+        this.movementTime = movementTime;
+        this.player       = player;
+        isAttack          = true;
 
 		// Monster Ai 설정
-		monsterAI.Initialize(this, new AStartPathFinder());
+		monsterAI.Initialize(this, pathFinder);
         
         // 규칙에 맞게 움직이도록 실행
         HandleMovementLoopAsync().Forget();

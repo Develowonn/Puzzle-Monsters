@@ -47,12 +47,12 @@ public class PlayerMovement : MonoBehaviour
         while (!token.IsCancellationRequested)
         {
             // 플레이어가 움직일 방향에 벽이 있는지 검사
-            bool isWall = GameManager.Instance.IsWallAtPosition(transform.position + movementDirection.normalized);
+            bool isWall = GridMapManager.Instance.IsWallAtPosition(transform.position + movementDirection.normalized);
 
             if (movementDirection != Vector3.zero && !player.IsMove && !isWall)
             {
                 Vector3 end = transform.position + movementDirection.normalized;
-                await player.MoveSmoothGrid(end);
+                await player.MoveSmoothGrid(end);   
             }
             await UniTask.Yield();
         }

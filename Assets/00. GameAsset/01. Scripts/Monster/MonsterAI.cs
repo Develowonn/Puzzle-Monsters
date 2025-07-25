@@ -23,7 +23,7 @@ public class MonsterAI : MonoBehaviour
     {
 		pathGizmosRenderer = GetComponent<PathGizmosRenderer>();
 
-		grid			= GameManager.Instance.GetGrid();
+		grid			= GridMapManager.Instance.GetGrid();
 		repathInterval  = GameManager.Instance.GetRepathInterval();
 		repathTimer     = repathInterval;
 	}
@@ -48,8 +48,8 @@ public class MonsterAI : MonoBehaviour
 
 	private void UpdatePath()
 	{
-		Vector2Int startPos  = GameManager.Instance.WorldToNode(transform.position);
-		Vector2Int targetPos = GameManager.Instance.WorldToNode(InGameManager.Instance.GetPlayerTransform().position);
+		Vector2Int startPos  = GridMapManager.Instance.WorldToNode(transform.position);
+		Vector2Int targetPos = GridMapManager.Instance.WorldToNode(InGameManager.Instance.GetPlayerTransform().position);
 
 		List<Node> path = pathFinder.FindPath(startPos, targetPos, grid);
 

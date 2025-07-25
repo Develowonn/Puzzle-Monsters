@@ -3,6 +3,6 @@ public enum MonsterType
 	None,
 	Oni,
 	Redfox,
-	Shoed,
+	Shoes,
 	Yokai
 }

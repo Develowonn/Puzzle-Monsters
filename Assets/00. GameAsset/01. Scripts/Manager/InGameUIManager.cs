@@ -19,27 +19,32 @@ public class InGameUIManager : MonoBehaviour
 	[SerializeField]
 	private float			    lifeFadeDuration;
 
+	[Header("Alive Monster UI")]
+	[SerializeField]
+	private TMP_Text		    aliveMonsterCountText;
+
 	[Header("Timer UI")]
 	[SerializeField]
 	private TMP_Text            timerText;
 	private float			    time;
 
 	private StringBuilder       timerStringBuilder;
+	private StringBuilder		aliveMonsterCountStringBuilder;
+
 	private Player				player;
 
 	private void Awake()
 	{
 		if (Instance == null)
-		{
 			Instance = this;
-		}
+
+		timerStringBuilder             = new StringBuilder();
+		aliveMonsterCountStringBuilder = new StringBuilder();
 	}
 
 	private void Start()
 	{
 		player = InGameManager.Instance.GetPlayerTransform().GetComponent<Player>();
-
-		timerStringBuilder = new StringBuilder();
 	}
 
 	private void Update()
@@ -63,4 +68,12 @@ public class InGameUIManager : MonoBehaviour
 
 		timerText.text = timerStringBuilder.ToString();
 	}
+
+	public void UpdateAliveMonsterCountUI()
+    {
+		aliveMonsterCountStringBuilder.Clear();
+		aliveMonsterCountStringBuilder.Append($"{InGameManager.Instance.GetAliveMonsterCount()}");
+
+		aliveMonsterCountText.text = aliveMonsterCountStringBuilder.ToString();
+    }
 }
