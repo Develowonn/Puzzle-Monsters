@@ -4,7 +4,7 @@ using System.Collections.Generic;
 // # Unity
 using UnityEngine;
 
-public class MonsterAI : MonoBehaviour
+public class MonsterAI
 {
 	private float				 repathInterval = 0.0f;
 	private float				 repathTimer    = 0.0f; 
@@ -12,55 +12,55 @@ public class MonsterAI : MonoBehaviour
 	private IPathFinder			 pathFinder;
 	
 	private Node[,]				 grid;
-	private PathGizmosRenderer   pathGizmosRenderer;
 
 	private List<Node>			 currentPath	 = new List<Node>();
 	private int					 currentPathIndex;
 
 	private Monster				 monster;
 
-    private void Start()
-    {
-		pathGizmosRenderer = GetComponent<PathGizmosRenderer>();
-
-		grid			= GridMapManager.Instance.GetGrid();
-		repathInterval  = GameManager.Instance.GetRepathInterval();
-		repathTimer     = repathInterval;
-	}
-
-    private void Update()
-	{
-		if (pathFinder == null) return;
-
-		repathTimer += Time.deltaTime;
-		if (repathTimer >= repathInterval && !monster.IsMove)
-		{ 
-			repathTimer = 0.0f;
-			UpdatePath();
-		}
-	}
-
 	public void Initialize(Monster monster, IPathFinder pathFinder)
     {
 		this.monster	   = monster;
 		this.pathFinder    = pathFinder;
+
+		grid               = GridMapManager.Instance.GetGrid();
+		repathInterval     = GameManager.Instance.GetRepathInterval();
+		repathTimer        = repathInterval;
 	}
 
-	private void UpdatePath()
+	public void Initialize(Monster monster)
 	{
-		Vector2Int startPos  = GridMapManager.Instance.WorldToNode(transform.position);
+		this.monster     = monster;
+
+		grid             = GridMapManager.Instance.GetGrid();
+		repathInterval   = GameManager.Instance.GetRepathInterval();
+		repathTimer      = repathInterval;
+	}
+
+	public void UpdatePath()
+	{
+		if(monster.GetMonsterRole() == MonsterRole.Leader)
+		{
+			UpdatePathFromPathFinder();
+		}
+	}
+
+	private void UpdatePathFromPathFinder()
+	{
+		Vector2Int startPos  = GridMapManager.Instance.WorldToNode(monster.transform.position);
 		Vector2Int targetPos = GridMapManager.Instance.WorldToNode(InGameManager.Instance.GetPlayerTransform().position);
 
 		List<Node> path = pathFinder.FindPath(startPos, targetPos, grid);
 
-        if (path != null)
-        {
-            currentPath      = path;
+		if (path != null)
+		{
+			currentPath = path;
 			currentPathIndex = 0;
-			
-			pathGizmosRenderer.Initialize(path, Color.red);
-        }
-    }
+
+			// Follow Monster 한테도 경로 알려주기 
+		}
+	}
+
 
 	public Vector2Int GetTargetNodePosition()
 	{
