@@ -1,8 +1,12 @@
 // # System
+using System;
 using System.Collections.Generic;
 
 // # Unity
 using UnityEngine;
+
+// # Etc
+using Cysharp.Threading.Tasks;
 
 public class InGameManager : MonoBehaviour
 {
@@ -21,9 +25,24 @@ public class InGameManager : MonoBehaviour
 		aliveMonsterList = new List<Monster>();
 	}
 
+	private void Start()
+	{
+		PlayIntro().Forget();
+	}
+
 	private void Update()
 	{
 		InputDebugModeKey();
+	}
+
+	private async UniTask PlayIntro() 
+	{
+		await UniTask.Delay(TimeSpan.FromSeconds(0.1f));
+		FadeManager.Instance.Fade();
+
+		await UniTask.Delay(TimeSpan.FromSeconds(FadeManager.Instance.GetFadeDuration()));
+		await InGameUIManager.Instance.PlayGameStartTimer(GameManager.Instance.GetGameStartDelay());
+		GameManager.Instance.StartGame();
 	}
 
 	private void InputDebugModeKey()

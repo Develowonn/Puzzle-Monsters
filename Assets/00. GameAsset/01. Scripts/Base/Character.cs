@@ -22,17 +22,14 @@ public class Character : MonoBehaviour
 
 		// 객체가 삭제될 경우 비동기 함수도 종료
 		var token = this.GetCancellationTokenOnDestroy();
-
 		while (!token.IsCancellationRequested && percent < 1.0f)
 		{
 			current += Time.deltaTime;	
-			percent = current / movementTime;
+			percent  = current / movementTime;
 
 			transform.position = Vector3.Lerp(start, end, percent);
-
 			await UniTask.Yield();
 		}
-
 		IsMove = false;
 	}
 }

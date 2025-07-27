@@ -35,10 +35,15 @@ public class MonsterSpawner : MonoBehaviour
 		// 객체가 삭제될 경우 비동기 함수도 종료
 		var token = this.GetCancellationTokenOnDestroy();
 
-		while (!token.IsCancellationRequested && GameManager.Instance.IsGamePlaying())
+		while (!token.IsCancellationRequested)
         {
-			WaveData currentWave = WaveManager.Instance.GetCurrentWaveData();
+			if (!GameManager.Instance.IsGamePlaying())
+			{
+				await UniTask.Yield();
+				continue;
+			}
 
+			WaveData currentWave = WaveManager.Instance.GetCurrentWaveData();
 			for (int i = 0; i < currentWave.pointSpawnDatas.Length; i++)
 			{
 				Vector3        spawnPoint     = spawnPoints[i].position;

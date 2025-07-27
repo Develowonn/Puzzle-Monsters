@@ -44,10 +44,16 @@ public class PlayerMovement : MonoBehaviour
         // 객체가 삭제될 경우 비동기 함수도 종료
         var token = this.GetCancellationTokenOnDestroy();
 
-        while (!token.IsCancellationRequested && GameManager.Instance.IsGamePlaying())
+        while (!token.IsCancellationRequested)
         {
-            // 플레이어가 움직일 방향에 벽이 있는지 검사
-            bool isWall = GridMapManager.Instance.IsWallAtPosition(transform.position + movementDirection.normalized);
+			if (!GameManager.Instance.IsGamePlaying())
+            {
+                await UniTask.Yield();
+				continue;
+			}
+
+			// 플레이어가 움직일 방향에 벽이 있는지 검사
+			bool isWall = GridMapManager.Instance.IsWallAtPosition(transform.position + movementDirection.normalized);
 
             if (movementDirection != Vector3.zero && !player.IsMove && !isWall)
             {

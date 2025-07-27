@@ -20,6 +20,9 @@ public class InGameUIManager : MonoBehaviour
 	[SerializeField]
 	private float				scaleEffectTime;
 
+	[SerializeField] [Space(10)]
+	private TMP_Text			gameStartTimertext;
+
 	[Header("Life UI")]
 	[SerializeField]
 	private SpriteRenderer[]	lifesIcon;
@@ -117,6 +120,13 @@ public class InGameUIManager : MonoBehaviour
 		waveText.text = waveStringBuilder.ToString();
     }
 
+	public async UniTask PlayGameStartTimer(int delay)
+	{
+		await PlayTextCountingAsync(gameStartTimertext, delay, 0, delay);
+		if(gameStartTimertext != null)
+			gameStartTimertext.gameObject.SetActive(false);
+	}
+
 	public void ActivateGameOverPanel()
 	{
 		gameOverBackground.SetActive(true);
@@ -137,13 +147,11 @@ public class InGameUIManager : MonoBehaviour
 
 	private void OnHomeButton()
 	{
-		GameManager.Instance.StartGame();
 		SceneManager.LoadScene(Constants.SceneName.Lobby);
 	}
 
 	private void OnRestartButton()
 	{
-		GameManager.Instance.StartGame();
 		SceneManager.LoadScene(Constants.SceneName.Game);
 	}
 
@@ -177,6 +185,28 @@ public class InGameUIManager : MonoBehaviour
 		{
 			current  += Time.deltaTime;
 			percent   = current / countingEffectTime;
+			text.text = Mathf.Lerp(start, end, percent).ToString("F0");
+
+			await UniTask.Yield();
+		}
+	}
+
+	private async UniTask PlayTextCountingAsync(TMP_Text text, int start, int end, float duration)
+	{
+		float current = 0;
+		float percent = 0;
+
+		// 객체가 삭제될 경우 비동기 함수도 종료
+		var token = this.GetCancellationTokenOnDestroy();
+
+		while (!token.IsCancellationRequested && percent < 1)
+		{
+			current += Time.deltaTime;
+			percent = current / duration;
+
+			if(text == null || !text.gameObject.activeSelf)
+				break;
+
 			text.text = Mathf.Lerp(start, end, percent).ToString("F0");
 
 			await UniTask.Yield();

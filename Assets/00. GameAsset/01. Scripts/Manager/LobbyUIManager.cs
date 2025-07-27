@@ -33,6 +33,7 @@ public class LobbyUIManager : MonoBehaviour
 	private void Start()
 	{
 		InitializeGameStartPanel();
+		FadeManager.Instance.Fade();
 	}
 
 	private void Update()

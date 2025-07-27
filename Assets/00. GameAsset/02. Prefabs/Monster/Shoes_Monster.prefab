@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0ea2c635b565ec409bfd7f9d946a562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementTime: 0.35
+  movementTime: 0.3
   monsterType: 3
   attackRange: 0.04
   attackCooltime: 1

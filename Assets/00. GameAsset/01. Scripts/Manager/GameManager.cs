@@ -9,6 +9,8 @@ public class GameManager : Singleton<GameManager>
 	[Header("Game")]
 	[SerializeField]
 	private bool			isGamePlaying;
+	[SerializeField]
+	private int				gameStartDelay;
 
 	[Header("Path Finder")]
 	[SerializeField]
@@ -21,6 +23,11 @@ public class GameManager : Singleton<GameManager>
 	public float GetRepathInterval()
 	{
 		return repathInterval;
+	}
+
+	public int GetGameStartDelay()
+	{
+		return gameStartDelay;
 	}
 
 	public void SetPathFinderType(PathFinderType pathFinderType)

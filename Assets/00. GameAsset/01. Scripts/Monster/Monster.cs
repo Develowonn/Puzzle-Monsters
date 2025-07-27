@@ -74,9 +74,15 @@ public class Monster : Character
         var token = this.GetCancellationTokenOnDestroy();
         await UniTask.Delay(TimeSpan.FromSeconds(delay));
 
-        while (!token.IsCancellationRequested && GameManager.Instance.IsGamePlaying())
+        while (!token.IsCancellationRequested)
         {
-            if (monsterRole == MonsterRole.Leader)
+			if (!GameManager.Instance.IsGamePlaying())
+            {
+				await UniTask.Yield();
+				continue;
+			}
+
+			if (monsterRole == MonsterRole.Leader)
             {
                 await MoveLeaderStepAsync();
 			}
@@ -85,8 +91,8 @@ public class Monster : Character
                 await MoveFollowerStepAsync();
 			}
 			await UniTask.Yield();
-        }
-    }
+		}
+	}
 
     private async UniTask MoveLeaderStepAsync()
     {
@@ -125,7 +131,7 @@ public class Monster : Character
         if(monsterRole == MonsterRole.Follower) return;
 
 		repathTimer += Time.deltaTime;
-		if (repathTimer > repathInterval && !IsMove)
+		if (repathTimer >= repathInterval && !IsMove)
 		{
 			monsterAI.UpdatePath();
 			repathTimer = 0;
