@@ -3680,6 +3680,8 @@ MonoBehaviour:
   - {fileID: 993139891}
   nextWaveInterval: 15
   player: {fileID: 1701418906}
+  movementTime: 0.35
+  movementTimeStep: 0.01
 --- !u!1 &507018548
 GameObject:
   m_ObjectHideFlags: 0
@@ -4961,7 +4963,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 869e1524cf2fa9a4c951c38809c29d48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  repathInterval: 0.5
+  pathFinderType: 0
+  repathInterval: 1
 --- !u!4 &926070888
 Transform:
   m_ObjectHideFlags: 0
@@ -14208,7 +14211,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -235, y: -70}
+  m_AnchoredPosition: {x: -186, y: -70}
   m_SizeDelta: {x: 200, y: 80}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1389850610
@@ -16675,7 +16678,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -460, y: -70}
+  m_AnchoredPosition: {x: -410.99994, y: -70}
   m_SizeDelta: {x: 200, y: 80}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1721705488

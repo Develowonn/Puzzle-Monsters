@@ -16,6 +16,12 @@ public class MonsterSpawner : MonoBehaviour
 	[SerializeField]
 	private Player		player;
 
+	[Header("Monster Movement Time")]
+	[SerializeField]
+	private float movementTime;
+	[SerializeField]
+	private float movementTimeStep;
+
 	private MonsterGroupKeyGenerator monsterGroupKeyGenerator;
 
     private void Start()
@@ -35,14 +41,22 @@ public class MonsterSpawner : MonoBehaviour
 				Vector3        spawnPoint     = spawnPoints[i].position;
 				PointSpawnData pointSpawnData = currentWave.pointSpawnDatas[i];
 
-				// Point 의 Spawn Data 의 Monster Count만큼 소환 
+				int groupID = monsterGroupKeyGenerator.GetNextGroupKey();
+
 				for (int j = 0; j < pointSpawnData.monsterCount; j++)
 				{
-					// 몬스터 타입이 정해져 있지 않으면 생성 X
 					if (pointSpawnData.type == MonsterType.None)
 						continue;
 
-					Monster monster = MonsterPoolManager.Instance.SpawnFromPool(pointSpawnData.type, spawnPoint).GetComponent<Monster>();
+					float		movementTime = Mathf.Max(0.1f, this.movementTime + (movementTimeStep * j));
+					MonsterRole	monsterRole  = j == 0 ? MonsterRole.Leader : MonsterRole.Follower;
+					Monster     monster      = MonsterPoolManager.Instance.SpawnFromPool(pointSpawnData.type, spawnPoint).GetComponent<Monster>();
+
+					// 소환된 몬스터를 Monster Group 에 넣기 
+					MonsterGroupManager.Instance.RegisterToMonsterGroup(groupID, monster);
+
+					// Monster Init
+					monster.Initialize(player, monsterRole, movementTime, groupID);
 				}
 			}
 

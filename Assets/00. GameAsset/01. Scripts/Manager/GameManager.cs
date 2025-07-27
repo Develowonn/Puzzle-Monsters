@@ -8,7 +8,7 @@ public class GameManager : Singleton<GameManager>
 {
 	[Header("Path Finder")]
 	[SerializeField]
-	private IPathFinder		currentPathFinder;
+	private PathFinderType	pathFinderType;
 	[SerializeField]
 	private float			repathInterval;
 
@@ -18,7 +18,13 @@ public class GameManager : Singleton<GameManager>
 	}
 
 	public IPathFinder GetPathFinder()
-    {
-		return currentPathFinder;
-    }
+	{
+		return pathFinderType switch
+		{
+			PathFinderType.AStar    => new AStartPathFinder(),
+			PathFinderType.BFS      => null,
+			PathFinderType.Dijkstra => null,
+			_ => null
+		};
+	}
 }

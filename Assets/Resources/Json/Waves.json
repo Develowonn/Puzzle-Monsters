@@ -3,34 +3,10 @@
     "pointSpawnDatas": [
       {
         "type": 1,
-        "monsterCount": 1
+        "monsterCount": 3
       },
       {
-        "type": 1,
-        "monsterCount": 1
-      },
-      {
-        "type": 1,
-        "monsterCount": 1
-      },
-      {
-        "type": 1,
-        "monsterCount": 1
-      },
-      {
-        "type": 1,
-        "monsterCount": 1
-      }
-    ]
-  },
-  {
-    "pointSpawnDatas": [
-      {
-        "type": 3,
-        "monsterCount": 2
-      },
-      {
-        "type": 3,
+        "type": 2,
         "monsterCount": 3
       },
       {
@@ -42,8 +18,8 @@
         "monsterCount": 0
       },
       {
-        "type": 2,
-        "monsterCount": 1
+        "type": 0,
+        "monsterCount": 0
       }
     ]
   }

@@ -12,9 +12,6 @@ public class MonsterGroupManager : Singleton<MonsterGroupManager>
 	
 	private void RegisterMonsterGroup(int groupID)
 	{
-		if (monsterGroupDictionary.ContainsKey(groupID))
-			return;
-
 		MonsterGroup monsterGroup = monsterGroupPool.Count > 0 
 								  ? monsterGroupPool.Dequeue()
 								  : new MonsterGroup();
@@ -25,7 +22,9 @@ public class MonsterGroupManager : Singleton<MonsterGroupManager>
 
 	public void RegisterToMonsterGroup(int groupID, Monster monster)
 	{
-		RegisterMonsterGroup(groupID);
+		if (!monsterGroupDictionary.ContainsKey(groupID))
+			RegisterMonsterGroup(groupID);
+
 		monsterGroupDictionary[groupID].AddMonster(monster);
 	}
 
@@ -37,5 +36,10 @@ public class MonsterGroupManager : Singleton<MonsterGroupManager>
 		monsterGroupDictionary[groupID].Cleanup();
 		monsterGroupPool.Enqueue(monsterGroupDictionary[groupID]);
 		monsterGroupDictionary.Remove(groupID);
+	}
+
+	public MonsterGroup GetMonsterGroup(int groupID)
+	{
+		return monsterGroupDictionary[groupID];
 	}
 }

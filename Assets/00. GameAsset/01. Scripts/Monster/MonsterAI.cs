@@ -6,15 +6,13 @@ using UnityEngine;
 
 public class MonsterAI
 {
-	private float				 repathInterval = 0.0f;
-	private float				 repathTimer    = 0.0f; 
-
 	private IPathFinder			 pathFinder;
 	
 	private Node[,]				 grid;
 
-	private List<Node>			 currentPath	 = new List<Node>();
+	private List<Node>			 currentPath	   = new List<Node>();
 	private int					 currentPathIndex;
+	private Queue<Vector2Int>	 leaderNodeHistory = new Queue<Vector2Int>();
 
 	private Monster				 monster;
 
@@ -22,19 +20,13 @@ public class MonsterAI
     {
 		this.monster	   = monster;
 		this.pathFinder    = pathFinder;
-
 		grid               = GridMapManager.Instance.GetGrid();
-		repathInterval     = GameManager.Instance.GetRepathInterval();
-		repathTimer        = repathInterval;
 	}
 
 	public void Initialize(Monster monster)
 	{
 		this.monster     = monster;
-
 		grid             = GridMapManager.Instance.GetGrid();
-		repathInterval   = GameManager.Instance.GetRepathInterval();
-		repathTimer      = repathInterval;
 	}
 
 	public void UpdatePath()
@@ -54,13 +46,29 @@ public class MonsterAI
 
 		if (path != null)
 		{
-			currentPath = path;
+			currentPath      = path;
 			currentPathIndex = 0;
-
-			// Follow Monster 한테도 경로 알려주기 
 		}
 	}
 
+	public void RecordLeaderNode(Vector2Int node)
+	{
+		leaderNodeHistory.Enqueue(node);
+	}
+
+	public Vector2Int? GetNextLeaderNode()
+	{
+		if(leaderNodeHistory.Count > 0)
+		{
+			return leaderNodeHistory.Dequeue();
+		}
+		return null;
+	}
+
+	public List<Node> GetPath() 
+	{ 
+		return currentPath;
+	}
 
 	public Vector2Int GetTargetNodePosition()
 	{
@@ -77,4 +85,9 @@ public class MonsterAI
     {
 		return currentPath.Count > 0;
     }
+
+	public bool HasLeaderNodeHistory()
+	{
+		return leaderNodeHistory.Count > 0;
+	}
 }
