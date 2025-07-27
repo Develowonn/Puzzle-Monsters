@@ -10,29 +10,32 @@ using Cysharp.Threading.Tasks;
 public class MonsterSpawner : MonoBehaviour
 {
 	[SerializeField]
-	private Transform[] spawnPoints;
+	private float		nextWaveInterval;
 	[SerializeField]
-	private float       nextWaveInterval;
+	private float	    movementDelayTimeStep;
+	[SerializeField]
+	private Transform[] spawnPoints;
 	[SerializeField]
 	private Player		player;
 
-	[Header("Monster Movement Time")]
-	[SerializeField]
-	private float movementTime;
-	[SerializeField]
-	private float movementTimeStep;
-
 	private MonsterGroupKeyGenerator monsterGroupKeyGenerator;
 
-    private void Start()
-    {
+	private void Awake()
+	{
 		monsterGroupKeyGenerator = new MonsterGroupKeyGenerator();
+	}
+
+	private void Start()
+    {
 		SpawnMonsterInWaveAsync().Forget();
     }
 
     public async UniTaskVoid SpawnMonsterInWaveAsync()
 	{
-        while (true)
+		// 객체가 삭제될 경우 비동기 함수도 종료
+		var token = this.GetCancellationTokenOnDestroy();
+
+		while (!token.IsCancellationRequested && GameManager.Instance.IsGamePlaying())
         {
 			WaveData currentWave = WaveManager.Instance.GetCurrentWaveData();
 
@@ -48,20 +51,29 @@ public class MonsterSpawner : MonoBehaviour
 					if (pointSpawnData.type == MonsterType.None)
 						continue;
 
-					float		movementTime = Mathf.Max(0.1f, this.movementTime + (movementTimeStep * j));
-					MonsterRole	monsterRole  = j == 0 ? MonsterRole.Leader : MonsterRole.Follower;
+					float		delay        = movementDelayTimeStep * j;
+					MonsterRole	monsterRole  = GetMonsterRole(j);
 					Monster     monster      = MonsterPoolManager.Instance.SpawnFromPool(pointSpawnData.type, spawnPoint).GetComponent<Monster>();
 
-					// 소환된 몬스터를 Monster Group 에 넣기 
-					MonsterGroupManager.Instance.RegisterToMonsterGroup(groupID, monster);
-
 					// Monster Init
-					monster.Initialize(player, monsterRole, movementTime, groupID);
+					monster.Initialize(player, monsterRole, delay, groupID);
+
+					// IsGroupSystem 활성화 된 상태일 때 Monster Group 추가
+					if (GameManager.Instance.IsGroupSystem())
+						MonsterGroupManager.Instance.RegisterToMonsterGroup(groupID, monster);
 				}
 			}
 
 			await UniTask.Delay(TimeSpan.FromSeconds(nextWaveInterval));
 			WaveManager.Instance.SetNextWaveData();
 		}
+	}
+
+	private MonsterRole GetMonsterRole(int index)
+	{
+		if (!GameManager.Instance.IsGroupSystem())
+			return MonsterRole.Leader;
+
+		return index > 0 ? MonsterRole.Follower : MonsterRole.Leader;
 	}
 }

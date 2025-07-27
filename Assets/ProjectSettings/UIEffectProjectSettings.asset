@@ -15,6 +15,8 @@ ShaderVariantCollection:
         passType: 0
       - keywords: EDGE_SHINY
         passType: 0
+      - keywords: GRADATION_GRADIENT
+        passType: 0
       - keywords: SAMPLING_EDGE_ALPHA
         passType: 0
 --- !u!114 &11400000

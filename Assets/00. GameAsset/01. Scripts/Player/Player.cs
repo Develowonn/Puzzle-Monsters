@@ -25,14 +25,10 @@ public class Player : Character
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
-    }
-
-    private void Start()
-    {
+        animator  = GetComponent<Animator>();
+		hashOnDie = Animator.StringToHash("OnDie");
 		currentLifeCount = maxLifeCount;
-		hashOnDie        = Animator.StringToHash("OnDie");
-    }
+	}
 
     private async UniTaskVoid ActivateInvincibility()
     {
@@ -43,7 +39,10 @@ public class Player : Character
 
     public void TakeDamage()
     {
-        if (isInvincibility) return;
+        if (isInvincibility || !GameManager.Instance.IsGamePlaying()) 
+            return;
+
+        // 목숨 1개 마이너스
 		currentLifeCount--;
 
         // 하트 아이콘 연출 
@@ -58,6 +57,9 @@ public class Player : Character
 
     private void Die()
     {
+        GameManager.Instance.EndGame();
+        InGameUIManager.Instance.ActivateGameOverPanel();
+
         IsDie = true;
         animator.SetTrigger(hashOnDie);
     }

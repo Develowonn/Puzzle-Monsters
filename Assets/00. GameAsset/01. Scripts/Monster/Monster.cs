@@ -37,14 +37,16 @@ public class Monster : Character
         hashIsRun      = Animator.StringToHash("IsRun");
     }
 
-	public void Initialize(Player player, MonsterRole monsterRole, float movementTime, int groupKey)
+	public void Initialize(Player player, MonsterRole monsterRole, float delay, int groupKey)
     {
-        this.movementTime = movementTime;
-        this.player       = player;
+        this.player             = player;
+		groupID                 = groupKey;
+		isAttack                = true;
+		IPathFinder pathFinder  = null;
 
-		groupID           = groupKey;
-		isAttack          = true;
-        var pathFinder    = GameManager.Instance.GetPathFinder();
+        // 경로 검색기 생성
+		if (monsterRole == MonsterRole.Leader)
+			pathFinder = GameManager.Instance.CreatePathFinder();
 
 		// Monster Ai 설정
 		monsterAI.Initialize(this, pathFinder);
@@ -52,12 +54,13 @@ public class Monster : Character
         repathTimer    = repathInterval;
         
         // 규칙에 맞게 움직이도록 실행
-        HandleMovementLoopAsync().Forget();
+        HandleMovementLoopAsync(delay).Forget();
     }
         
 	private void Update()
     {
-        if(player.IsDie) return;
+        if(player.IsDie || !GameManager.Instance.IsGamePlaying())
+            return;
 
         UpdatePath();
 		UpdateRunAnimation();
@@ -65,39 +68,56 @@ public class Monster : Character
         TryAttackPlayer();
     }
 
-    private async UniTaskVoid HandleMovementLoopAsync()
+    private async UniTaskVoid HandleMovementLoopAsync(float delay)
     {
         // 객체가 삭제될 경우 비동기 함수도 종료
         var token = this.GetCancellationTokenOnDestroy();
+        await UniTask.Delay(TimeSpan.FromSeconds(delay));
 
-        while (!token.IsCancellationRequested)
+        while (!token.IsCancellationRequested && GameManager.Instance.IsGamePlaying())
         {
             if (monsterRole == MonsterRole.Leader)
             {
-				if (monsterAI != null && monsterAI.HasPath())
-				{
-					Vector2Int   end          = monsterAI.GetTargetNodePosition();
-					MonsterGroup monsterGroup = MonsterGroupManager.Instance.GetMonsterGroup(groupID);
-					monsterGroup.RecordPathToFollowers(end);
-
-					await MoveSmoothGrid((Vector3Int)end);
-					monsterAI.MoveNextNode();
-				}
+                await MoveLeaderStepAsync();
 			}
             else
             {
-				if (monsterAI != null && monsterAI.HasLeaderNodeHistory())
-				{
-					Vector2Int? end = monsterAI.GetNextLeaderNode();
-					if (end == null) return;
-
-					await MoveSmoothGrid((Vector3Int)end);
-					monsterAI.MoveNextNode();
-				}
+                await MoveFollowerStepAsync();
 			}
 			await UniTask.Yield();
         }
     }
+
+    private async UniTask MoveLeaderStepAsync()
+    {
+		if (monsterAI == null || !monsterAI.HasPath())
+                return;
+
+		Vector2Int end = monsterAI.GetTargetNodePosition();
+
+        // Follow Monster 들에게 경로 공유
+        if (GameManager.Instance.IsGroupSystem())
+        {
+			MonsterGroup monsterGroup = MonsterGroupManager.Instance.GetMonsterGroup(groupID);
+			monsterGroup.RecordPathToFollowers(end);
+		}
+
+		await MoveSmoothGrid((Vector3Int)end);
+		monsterAI.MoveNextNode();
+	}
+
+    private async UniTask MoveFollowerStepAsync()
+    {
+		if (monsterAI == null && !monsterAI.HasLeaderNodeHistory())
+            return;
+        
+		Vector2Int? end = monsterAI.GetNextLeaderNode();
+		if (end == null) 
+            return;
+
+		await MoveSmoothGrid((Vector3Int)end);
+		monsterAI.MoveNextNode();
+	}
 
     private void UpdatePath()
     {

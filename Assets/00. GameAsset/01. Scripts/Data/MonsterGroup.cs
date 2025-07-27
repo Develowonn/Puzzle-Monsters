@@ -43,17 +43,6 @@ public class MonsterGroup
 		}
 	}
 
-	public void OnLeaderDead()
-	{
-		if(followers.Count > 0)
-		{
-			groupID = -1;
-			leader  = followers[0];
-			followers.RemoveAt(0);
-			leader.AssignRole(MonsterRole.Leader);
-		}
-	}
-
 	public void Cleanup()
 	{
 		leader = null;

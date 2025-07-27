@@ -104,7 +104,10 @@ public class AStartPathFinder : IPathFinder
 
 		// 방향 순서 ( 위 -> 아래 -> 왼쪽 -> 오른쪽 )
 		Vector2Int[] directions = {
-			Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right,
+			Vector2Int.up, 
+			Vector2Int.down, 
+			Vector2Int.left, 
+			Vector2Int.right,
 		};
 
 		foreach(Vector2Int direction in directions)

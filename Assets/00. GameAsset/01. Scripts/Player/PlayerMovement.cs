@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (player.IsDie)
+        if (player.IsDie || !GameManager.Instance.IsGamePlaying())
         {
             movementDirection = Vector3.zero;
             return;
@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
         // 객체가 삭제될 경우 비동기 함수도 종료
         var token = this.GetCancellationTokenOnDestroy();
 
-        while (!token.IsCancellationRequested)
+        while (!token.IsCancellationRequested && GameManager.Instance.IsGamePlaying())
         {
             // 플레이어가 움직일 방향에 벽이 있는지 검사
             bool isWall = GridMapManager.Instance.IsWallAtPosition(transform.position + movementDirection.normalized);
