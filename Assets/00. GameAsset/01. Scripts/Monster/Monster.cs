@@ -45,8 +45,8 @@ public class Monster : Character
 		IPathFinder pathFinder  = null;
 
         // 경로 검색기 생성
-		if (monsterRole == MonsterRole.Leader)
-			pathFinder = GameManager.Instance.CreatePathFinder();
+        if (monsterRole == MonsterRole.Leader)
+            pathFinder = new AStarPathFinder();
 
 		// Monster Ai 설정
 		monsterAI.Initialize(this, pathFinder);

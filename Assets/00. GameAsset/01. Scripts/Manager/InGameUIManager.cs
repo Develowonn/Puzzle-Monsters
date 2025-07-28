@@ -25,7 +25,7 @@ public class InGameUIManager : MonoBehaviour
 
 	[Header("Life UI")]
 	[SerializeField]
-	private SpriteRenderer[]	lifesIcon;
+	private Image[]				lifesIcon;
 	[SerializeField]
 	private float			    lifeFadeDuration;
 

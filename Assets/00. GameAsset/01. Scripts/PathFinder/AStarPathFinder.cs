@@ -4,7 +4,7 @@ using System.Collections.Generic;
 // # Unity
 using UnityEngine;
 
-public class AStartPathFinder : IPathFinder
+public class AStarPathFinder : IPathFinder
 {
 	private List<Node> openList;
 	private List<Node> closeList;
@@ -53,13 +53,13 @@ public class AStartPathFinder : IPathFinder
 				if(neighborNode.isWall || closeList.Contains(neighborNode))
 					continue;
 
-				int moveCost = currentNode.gCost + GetDistance(currentNode, neighborNode);
+				int moveCost = currentNode.gCost + GetManhattanDistance(currentNode, neighborNode);
 
 				// 더 짧은 경로로 도달하거나 처음 방문하는 노드면 갱신
 				if(moveCost < neighborNode.gCost || !openList.Contains(neighborNode))
 				{
 					neighborNode.gCost      = moveCost;
-					neighborNode.hCost      = GetDistance(neighborNode, targetNode);
+					neighborNode.hCost      = GetManhattanDistance(neighborNode, targetNode);
 					neighborNode.parentNode = currentNode;
 
 					if (!openList.Contains(neighborNode))
@@ -72,7 +72,7 @@ public class AStartPathFinder : IPathFinder
 		return new List<Node>(); 
 	}
 
-	private int GetDistance(Node nodeA, Node nodeB)
+	private int GetManhattanDistance(Node nodeA, Node nodeB)
 	{
 		// X와 Y 좌표 차이의 절재값을 계산
 		int distanceX = Mathf.Abs(nodeA.nodePosition.x - nodeB.nodePosition.x);

@@ -13,14 +13,9 @@ public class FadeManager : MonoBehaviour
 	public static FadeManager Instance { get; private set; }
 
 	[SerializeField]
-	private GameObject	  canvas;
-	[SerializeField]
 	private RectTransform fadeImage;
 	[SerializeField]
 	private float		  fadeDuration;
-	[SerializeField]
-	private bool		  isDisableCanvas = true;
-
 	private void Awake()
 	{
 		if(Instance == null)
@@ -34,9 +29,6 @@ public class FadeManager : MonoBehaviour
 		fadeImage.gameObject.SetActive(true);
 		fadeImage.DOSizeDelta(new Vector2(5000, 5000), fadeDuration).SetEase(Ease.InQuad).OnComplete(() => {
 			fadeImage.gameObject.SetActive(false);
-
-			if(isDisableCanvas)
-				canvas.SetActive(false);
 		});
 	}
 

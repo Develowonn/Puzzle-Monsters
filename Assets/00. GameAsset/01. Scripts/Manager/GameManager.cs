@@ -14,8 +14,6 @@ public class GameManager : Singleton<GameManager>
 
 	[Header("Path Finder")]
 	[SerializeField]
-	private PathFinderType	pathFinderType;
-	[SerializeField]
 	private float			repathInterval;
 	[SerializeField]
 	private bool			isGroupSystem;
@@ -30,25 +28,9 @@ public class GameManager : Singleton<GameManager>
 		return gameStartDelay;
 	}
 
-	public void SetPathFinderType(PathFinderType pathFinderType)
-	{
-		this.pathFinderType = pathFinderType;
-	}
-
 	public void SetGroupSystemEnabled(bool isEnabled)
 	{
 		isGroupSystem = isEnabled;
-	}
-
-	public IPathFinder CreatePathFinder()
-	{
-		return pathFinderType switch
-		{
-			PathFinderType.AStar    => new AStartPathFinder(),
-			PathFinderType.BFS      => null,
-			PathFinderType.Dijkstra => null,
-			_ => null
-		};
 	}
 
 	public bool IsGroupSystem()
