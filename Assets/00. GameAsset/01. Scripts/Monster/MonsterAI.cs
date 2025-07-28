@@ -48,8 +48,28 @@ public class MonsterAI
 		{
 			currentPath      = path;
 			currentPathIndex = 0;
+			DrawPath();
 		}
 	}
+
+	public void DrawPath()
+    {
+		if (currentPath == null || currentPath.Count == 0 || monster.GetLineRenderer() == null || !monster.GetLineRenderer().enabled)
+        {
+			monster.GetLineRenderer().positionCount = 0;
+			return;
+        }
+
+		Vector3[] postions = new Vector3[currentPath.Count];
+		for(int i = 0; i < postions.Length; i++)
+        {
+			Vector2Int gridpos = currentPath[i].nodePosition;
+			postions[i] = new Vector3(gridpos.x, gridpos.y, 0);	
+        }
+
+		monster.GetLineRenderer().positionCount = postions.Length;
+		monster.GetLineRenderer().SetPositions(postions);
+    }
 
 	public void RecordLeaderNode(Vector2Int node)
 	{

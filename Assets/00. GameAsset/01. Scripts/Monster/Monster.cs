@@ -11,24 +11,25 @@ using Cysharp.Threading.Tasks;
 public class Monster : Character
 {
     [SerializeField]
-    private MonsterType monsterType;
-    private MonsterRole monsterRole;
+    private MonsterType  monsterType;
+    private MonsterRole  monsterRole;
 
     [SerializeField] [Space(10)]
-    private float     attackRange;
+    private float        attackRange;
     [SerializeField]
-    private float     attackCooltime;
+    private float        attackCooltime;
 
-    private bool      isAttack;
-    private int       groupID;
-    private int       hashIsRun;
+    private bool         isAttack;
+    private int          groupID;
+    private int          hashIsRun;
 
-	private float     repathInterval = 0.0f;
-	private float     repathTimer    = 0.0f;
+	private float        repathInterval = 0.0f;
+	private float        repathTimer    = 0.0f;
 
-	private Player    player;
-    private Animator  animator;
-    private MonsterAI monsterAI;
+	private Player       player;
+    private Animator     animator;
+    private LineRenderer lineRenderer;
+    private MonsterAI    monsterAI;
 
     private void Awake()
     {
@@ -44,14 +45,16 @@ public class Monster : Character
 		isAttack                = true;
 		IPathFinder pathFinder  = null;
 
-        // 경로 검색기 생성
         if (monsterRole == MonsterRole.Leader)
-            pathFinder = new AStarPathFinder();
+        {
+            pathFinder   = new AStarPathFinder();
+            lineRenderer = GetComponent<LineRenderer>();
+        }
 
 		// Monster Ai 설정
 		monsterAI.Initialize(this, pathFinder);
         repathInterval = GameManager.Instance.GetRepathInterval();
-        repathTimer    = repathInterval;
+        repathTimer    = UnityEngine.Random.Range(0, repathInterval);
         
         // 규칙에 맞게 움직이도록 실행
         HandleMovementLoopAsync(delay).Forget();
@@ -82,14 +85,11 @@ public class Monster : Character
 				continue;
 			}
 
-			if (monsterRole == MonsterRole.Leader)
-            {
+			if (monsterRole == MonsterRole.Leader) 
                 await MoveLeaderStepAsync();
-			}
-            else
-            {
+            else 
                 await MoveFollowerStepAsync();
-			}
+
 			await UniTask.Yield();
 		}
 	}
@@ -134,6 +134,7 @@ public class Monster : Character
 		if (repathTimer >= repathInterval && !IsMove)
 		{
 			monsterAI.UpdatePath();
+            monsterAI.DrawPath();
 			repathTimer = 0;
 		}
 	}
@@ -174,7 +175,6 @@ public class Monster : Character
             WaitForAttackCooltime().Forget();
         }
     }
-
     private async UniTaskVoid WaitForAttackCooltime()
     {
         await UniTask.Delay(TimeSpan.FromSeconds(attackCooltime));
@@ -184,6 +184,12 @@ public class Monster : Character
     public void AssignRole(MonsterRole role)
     {
         monsterRole = role;
+    }
+
+    public void EnableLineRender()
+    {
+        if(lineRenderer != null)
+            lineRenderer.enabled = !lineRenderer.enabled;
     }
 
     public int GetGroupID()
@@ -204,5 +210,10 @@ public class Monster : Character
     public MonsterRole GetMonsterRole()
     {
         return monsterRole;
+    }
+
+    public LineRenderer GetLineRenderer()
+    {
+        return lineRenderer;
     }
 }

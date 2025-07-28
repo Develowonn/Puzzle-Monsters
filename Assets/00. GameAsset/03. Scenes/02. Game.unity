@@ -4632,7 +4632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c8bb95011901fb4bb7e8ffda9058b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextWaveInterval: 15
+  nextWaveInterval: 2
   movementDelayTimeStep: 0.4
   spawnPoints:
   - {fileID: 1829610306}

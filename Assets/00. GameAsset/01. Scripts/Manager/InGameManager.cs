@@ -12,6 +12,8 @@ public class InGameManager : MonoBehaviour
 {
 	public static InGameManager Instance { get; private set; }
 
+	public  bool		  IsDebugMode { get; private set; }
+
 	[SerializeField]
 	private Transform     playerTransform;
 
@@ -50,6 +52,12 @@ public class InGameManager : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
 			InGameUIManager.Instance.OnDebugMode();
+			IsDebugMode = !IsDebugMode;
+
+			foreach(var monster in aliveMonsterList)
+            {
+				monster.EnableLineRender();
+            }
 		}
 	}
 

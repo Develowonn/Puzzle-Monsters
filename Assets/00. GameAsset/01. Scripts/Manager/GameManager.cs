@@ -16,11 +16,14 @@ public class GameManager : Singleton<GameManager>
 	[SerializeField]
 	private float			repathInterval;
 	[SerializeField]
+	private Vector2			repathIntervalOffsetRange;
+	[SerializeField]
 	private bool			isGroupSystem;
 
 	public float GetRepathInterval()
 	{
-		return repathInterval;
+		float repathInterval = this.repathInterval + Random.Range(repathIntervalOffsetRange.x, repathIntervalOffsetRange.y);
+		return Mathf.Max(repathInterval, 0.1f);
 	}
 
 	public int GetGameStartDelay()

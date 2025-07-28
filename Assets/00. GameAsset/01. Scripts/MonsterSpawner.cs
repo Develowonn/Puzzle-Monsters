@@ -50,7 +50,6 @@ public class MonsterSpawner : MonoBehaviour
 				PointSpawnData pointSpawnData = currentWave.pointSpawnDatas[i];
 
 				int groupID = monsterGroupKeyGenerator.GetNextGroupKey();
-
 				for (int j = 0; j < pointSpawnData.monsterCount; j++)
 				{
 					if (pointSpawnData.type == MonsterType.None)
@@ -66,6 +65,9 @@ public class MonsterSpawner : MonoBehaviour
 					// IsGroupSystem 활성화 된 상태일 때 Monster Group 추가
 					if (GameManager.Instance.IsGroupSystem())
 						MonsterGroupManager.Instance.RegisterToMonsterGroup(groupID, monster);
+
+					if (InGameManager.Instance.IsDebugMode)
+						monster.EnableLineRender();
 				}
 			}
 

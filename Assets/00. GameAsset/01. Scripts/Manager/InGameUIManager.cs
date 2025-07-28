@@ -62,6 +62,7 @@ public class InGameUIManager : MonoBehaviour
 	[SerializeField]
 	private Button				restartButton;
 
+	private StringBuilder		timerBuilder;
 	private StringBuilder		waveStringBuilder;
 
 	private Player				player;
@@ -72,6 +73,7 @@ public class InGameUIManager : MonoBehaviour
 			Instance = this;
 
 		hashIsDebug		    = Animator.StringToHash("IsDebug");
+		timerBuilder        = new StringBuilder();
 		waveStringBuilder	= new StringBuilder();
 	}
 
@@ -102,6 +104,7 @@ public class InGameUIManager : MonoBehaviour
 	public void UpdateTimerUI()
 	{
 		time		  += Time.deltaTime;
+
 		timerText.text = time.ToString("F2");
 	}
 
@@ -185,7 +188,7 @@ public class InGameUIManager : MonoBehaviour
 		{
 			current  += Time.deltaTime;
 			percent   = current / countingEffectTime;
-			text.text = Mathf.Lerp(start, end, percent).ToString("F0");
+			text.text = Mathf.FloorToInt(Mathf.Lerp(start, end, percent)).ToString();
 
 			await UniTask.Yield();
 		}
@@ -207,7 +210,7 @@ public class InGameUIManager : MonoBehaviour
 			if(text == null || !text.gameObject.activeSelf)
 				break;
 
-			text.text = Mathf.Lerp(start, end, percent).ToString("F0");
+			text.text = Mathf.FloorToInt(Mathf.Lerp(start, end, percent)).ToString();
 
 			await UniTask.Yield();
 		}
