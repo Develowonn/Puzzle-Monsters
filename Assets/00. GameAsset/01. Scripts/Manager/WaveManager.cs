@@ -71,4 +71,13 @@ public class WaveManager : Singleton<WaveManager>
 	{
 		return waveDatas[currentWaveIndex];
 	}
+
+	public void Restart()
+	{
+		for (int i = 0; i < waveIndexs.Length; i++)
+		{
+			waveIndexs[i] = i;
+		}
+		currentWaveIndex = 0;
+	}
 }

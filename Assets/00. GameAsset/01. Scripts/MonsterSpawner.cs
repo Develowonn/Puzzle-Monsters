@@ -72,7 +72,9 @@ public class MonsterSpawner : MonoBehaviour
 			}
 
 			await UniTask.Delay(TimeSpan.FromSeconds(nextWaveInterval));
-			WaveManager.Instance.SetNextWaveData();
+
+			if(GameManager.Instance.IsGamePlaying())
+				WaveManager.Instance.SetNextWaveData();
 		}
 	}
 

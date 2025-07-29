@@ -141,11 +141,13 @@ public class InGameUIManager : MonoBehaviour
 
 	private void OnHomeButton()
 	{
+		WaveManager.Instance.Restart();
 		SceneManager.LoadScene(Constants.SceneName.Lobby);
 	}
 
 	private void OnRestartButton()
 	{
+		WaveManager.Instance.Restart();
 		SceneManager.LoadScene(Constants.SceneName.Game);
 	}
 
@@ -205,5 +207,10 @@ public class InGameUIManager : MonoBehaviour
 
 			await UniTask.Yield();
 		}
+	}
+
+	private void OnDestroy()
+	{
+		DOTween.Kill(this);
 	}
 }

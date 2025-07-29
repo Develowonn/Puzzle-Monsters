@@ -22,9 +22,7 @@ public class GameManager : Singleton<GameManager>
 
 	private void Start()
 	{
-		#if !UNITY_EDITOR
-			Application.targetFrameRate = 360;
-		#endif
+		Application.targetFrameRate = 720;
 	}
 
 	public float GetRepathInterval()

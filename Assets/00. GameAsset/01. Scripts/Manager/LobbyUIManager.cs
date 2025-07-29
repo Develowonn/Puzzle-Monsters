@@ -87,4 +87,9 @@ public class LobbyUIManager : MonoBehaviour
 
 		return color;
 	}
+
+	private void OnDestroy()
+	{
+		DOTween.Kill(this);
+	}
 }
