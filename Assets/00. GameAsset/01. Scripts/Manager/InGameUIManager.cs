@@ -62,9 +62,6 @@ public class InGameUIManager : MonoBehaviour
 	[SerializeField]
 	private Button				restartButton;
 
-	private StringBuilder		timerBuilder;
-	private StringBuilder		waveStringBuilder;
-
 	private Player				player;
 
 	private void Awake()
@@ -73,8 +70,6 @@ public class InGameUIManager : MonoBehaviour
 			Instance = this;
 
 		hashIsDebug		    = Animator.StringToHash("IsDebug");
-		timerBuilder        = new StringBuilder();
-		waveStringBuilder	= new StringBuilder();
 	}
 
 	private void Start()
@@ -116,11 +111,7 @@ public class InGameUIManager : MonoBehaviour
 	public void UpdateWaveUI()
     {
 		wave++;
-		waveStringBuilder.Clear();
-		waveStringBuilder.Append("Wave ");
-		waveStringBuilder.Append(wave);
-
-		waveText.text = waveStringBuilder.ToString();
+		waveText.text = $"Wave {wave}";
     }
 
 	public async UniTask PlayGameStartTimer(int delay)
