@@ -26,6 +26,9 @@ public class FadeManager : MonoBehaviour
 
 	public void Fade()
 	{
+		if(fadeImage == null)
+			return;
+
 		fadeImage.gameObject.SetActive(true);
 		fadeImage.DOSizeDelta(new Vector2(5000, 5000), fadeDuration).SetEase(Ease.InQuad).OnComplete(() => {
 			fadeImage.gameObject.SetActive(false);

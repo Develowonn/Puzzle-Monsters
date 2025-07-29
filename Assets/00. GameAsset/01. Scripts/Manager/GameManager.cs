@@ -23,7 +23,7 @@ public class GameManager : Singleton<GameManager>
 	public float GetRepathInterval()
 	{
 		float repathInterval = this.repathInterval + Random.Range(repathIntervalOffsetRange.x, repathIntervalOffsetRange.y);
-		return Mathf.Max(repathInterval, 0.1f);
+		return Mathf.Max(repathInterval, this.repathInterval - repathIntervalOffsetRange.x);
 	}
 
 	public int GetGameStartDelay()

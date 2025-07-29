@@ -6,8 +6,11 @@ using UnityEngine;
 
 public class AStarPathFinder : IPathFinder
 {
-	private List<Node> openList;
-	private List<Node> closeList;
+	private readonly Vector2Int[] directions = new Vector2Int[] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+
+	private PriorityQueue<Node> openQueue;
+	private HashSet<Node>		openSet;
+	private HashSet<Node>		closeSet;
 
 	private int sizeX;
 	private int sizeY;
@@ -20,24 +23,19 @@ public class AStarPathFinder : IPathFinder
 		Node startNode  = grid[startPos.x, startPos.y];
 		Node targetNode = grid[targetPos.x, targetPos.y];	
 
-		openList  = new List<Node>() { startNode };
-		closeList = new List<Node>();
+		openQueue  = new PriorityQueue<Node>(grid.Length);
+		openQueue.Enqueue(startNode);
 
-		while(openList.Count > 0)
+		openSet  = new HashSet<Node>() { startNode };
+		closeSet = new HashSet<Node>();
+
+		while(openQueue.Count > 0)
 		{
 			// FCost가 가장 낮은 노드를 선택 
 			// FCost가 같을 때 HCost가 더 낮은 쪽을 우선으로 한다.
-			Node currentNode = openList[0];
-			for(int i = 1; i < openList.Count; i++)
-			{
-				if (openList[i].fCost < currentNode.fCost ||
-				   (openList[i].fCost == currentNode.fCost && openList[i].hCost < currentNode.hCost))
-				{
-					currentNode = openList[i];
-				}
-			}
-			openList.Remove(currentNode);
-			closeList.Add(currentNode);
+			Node currentNode = openQueue.Dequeue();
+			openSet.Remove(currentNode);
+			closeSet.Add(currentNode);
 
 			// 목표 노드에 도달하면 경로를 역추적해서 반환
 			// 경로를 TargetNode 부터 거꾸로 저장해 역추적을 해야 StartNode ~ TargetNode 순으로 저장됨
@@ -50,20 +48,23 @@ public class AStarPathFinder : IPathFinder
 			foreach(Node neighborNode in GetNeighbors(currentNode, grid))
 			{
 				// 이웃한 노드가 (벽)노드 또는 closeList에 포함중일 때 건너뛴다.
-				if(neighborNode.isWall || closeList.Contains(neighborNode))
+				if(neighborNode.isWall || closeSet.Contains(neighborNode))
 					continue;
 
 				int moveCost = currentNode.gCost + GetManhattanDistance(currentNode, neighborNode);
 
 				// 더 짧은 경로로 도달하거나 처음 방문하는 노드면 갱신
-				if(moveCost < neighborNode.gCost || !openList.Contains(neighborNode))
+				if(moveCost < neighborNode.gCost || !openSet.Contains(neighborNode))
 				{
 					neighborNode.gCost      = moveCost;
 					neighborNode.hCost      = GetManhattanDistance(neighborNode, targetNode);
 					neighborNode.parentNode = currentNode;
 
-					if (!openList.Contains(neighborNode))
-						openList.Add(neighborNode);
+					if (!openSet.Contains(neighborNode))
+					{
+						openQueue.Enqueue(neighborNode);
+						openSet.Add(neighborNode);
+					}
 				}
 			}
 		}
@@ -103,13 +104,6 @@ public class AStarPathFinder : IPathFinder
 		List<Node> neighbors = new List<Node>();
 
 		// 방향 순서 ( 위 -> 아래 -> 왼쪽 -> 오른쪽 )
-		Vector2Int[] directions = {
-			Vector2Int.up, 
-			Vector2Int.down, 
-			Vector2Int.left, 
-			Vector2Int.right,
-		};
-
 		foreach(Vector2Int direction in directions)
 		{
 			Vector2Int checkDirection = currentNode.nodePosition + direction;
