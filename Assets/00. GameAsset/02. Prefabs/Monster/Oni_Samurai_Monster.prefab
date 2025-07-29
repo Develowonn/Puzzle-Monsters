@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 6650591331682018194}
   - component: {fileID: 6515694563125226906}
   - component: {fileID: 9071253003364057814}
-  - component: {fileID: 4345277423797388773}
-  - component: {fileID: 1076755414210131746}
+  - component: {fileID: 2049809600496444604}
   - component: {fileID: 2384046178770200185}
   - component: {fileID: 2061480079368607873}
   m_Layer: 0
@@ -87,28 +86,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!95 &4345277423797388773
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7271677577531417653}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 77ad211ee5a1aa24e923d077ba5daf83, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1076755414210131746
+--- !u!114 &2049809600496444604
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,7 +95,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7271677577531417653}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9db98c60740638449864eb028fbe7ad, type: 3}
+  m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonDataAsset: {fileID: 11400000, guid: d57f0382cfacf5b48a494a7d0f33cab5, type: 2}
@@ -146,12 +124,11 @@ MonoBehaviour:
   physicsPositionInheritanceFactor: {x: 1, y: 1}
   physicsRotationInheritanceFactor: 1
   physicsMovementRelativeTo: {fileID: 0}
-  translator:
-    autoReset: 1
-    useCustomMixMode: 1
-    layerMixModes: 01000000
-    layerBlendModes: 01000000
   updateTiming: 1
+  unscaledTime: 0
+  _animationName: 
+  loop: 0
+  timeScale: 1
 --- !u!114 &2384046178770200185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,6 +145,8 @@ MonoBehaviour:
   monsterType: 1
   attackRange: 0.04
   attackCooltime: 1
+  idleAnimationName: Idle
+  runAnimationName: Run
 --- !u!120 &2061480079368607873
 LineRenderer:
   serializedVersion: 2

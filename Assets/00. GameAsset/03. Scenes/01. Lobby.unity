@@ -475,9 +475,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 869e1524cf2fa9a4c951c38809c29d48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGamePlaying: 1
+  isGamePlaying: 0
   gameStartDelay: 3
-  repathInterval: 0.5
+  repathInterval: 1
   repathIntervalOffsetRange: {x: -0.2, y: 0.2}
   isGroupSystem: 0
 --- !u!4 &357718110

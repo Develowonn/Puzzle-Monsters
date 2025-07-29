@@ -32,7 +32,7 @@ public class FadeManager : MonoBehaviour
 		fadeImage.gameObject.SetActive(true);
 		fadeImage.DOSizeDelta(new Vector2(5000, 5000), fadeDuration).SetEase(Ease.InQuad).OnComplete(() => {
 			fadeImage.gameObject.SetActive(false);
-		});
+		}).SetAutoKill(true);
 	}
 
 	public float GetFadeDuration()

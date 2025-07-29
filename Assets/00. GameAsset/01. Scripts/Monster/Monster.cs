@@ -7,6 +7,7 @@ using UnityEngine;
 
 // # Etc
 using Cysharp.Threading.Tasks;
+using Spine.Unity;
 
 public class Monster : Character
 {
@@ -14,30 +15,43 @@ public class Monster : Character
     private MonsterType  monsterType;
     private MonsterRole  monsterRole;
 
-    [SerializeField] [Space(10)]
+	[Space(10)] [SerializeField]
     private float        attackRange;
     [SerializeField]
     private float        attackCooltime;
 
-    private bool         isAttack;
+	[Header("Animation")]
+	[SerializeField] [SpineAnimation]
+	private string       runAnimationName;
+
+	private bool         isAttack;
     private int          groupID;
-    private int          hashIsRun;
 
 	private float        repathInterval = 0.0f;
 	private float        repathTimer    = 0.0f;
 
-	private Player       player;
-    private Animator     animator;
-    private LineRenderer lineRenderer;
-    private MonsterAI    monsterAI;
+	private Player               player;
+    private LineRenderer         lineRenderer;
+    private MonsterAI            monsterAI;
+	private SkeletonAnimation    skeletonAnimation;
+	private Spine.AnimationState spineAnimationState;
 
-    private void Awake()
+	private void Awake()
     {
         monsterAI      = new MonsterAI();
-        animator       = GetComponent<Animator>();
-        hashIsRun      = Animator.StringToHash("IsRun");
-    }
+	}
 
+	private void Update()
+	{
+		if (player.IsDie || !GameManager.Instance.IsGamePlaying())
+			return;
+
+		UpdatePath();
+		UpdateSpriteX();
+		TryAttackPlayer();
+	}
+
+	#region 초기화 관련 함수 
 	public void Initialize(Player player, MonsterRole monsterRole, float delay, int groupKey)
     {
         this.player             = player;
@@ -55,23 +69,24 @@ public class Monster : Character
 		monsterAI.Initialize(this, pathFinder);
         repathInterval = GameManager.Instance.GetRepathInterval();
         repathTimer    = UnityEngine.Random.Range(0, repathInterval);
-        
-        // 규칙에 맞게 움직이도록 실행
-        HandleMovementLoopAsync(delay).Forget();
-    }
-        
-	private void Update()
-    {
-        if(player.IsDie || !GameManager.Instance.IsGamePlaying())
-            return;
 
-        UpdatePath();
-		UpdateRunAnimation();
-        UpdateSpriteX();
-        TryAttackPlayer();
-    }
+		// 애니메이션 설정 
+		InitializeAnimation();
 
-    private async UniTaskVoid HandleMovementLoopAsync(float delay)
+		// 규칙에 맞게 움직이도록 실행
+		HandleMovementLoopAsync(delay).Forget();
+	}
+
+	private void InitializeAnimation()
+	{
+		skeletonAnimation = GetComponent<SkeletonAnimation>();
+		spineAnimationState = skeletonAnimation.AnimationState;
+		PlayRunAnimation();
+	}
+	#endregion
+
+	#region 이동 관련 함수 
+	private async UniTaskVoid HandleMovementLoopAsync(float delay)
     {
         // 객체가 삭제될 경우 비동기 함수도 종료
         var token = this.GetCancellationTokenOnDestroy();
@@ -124,8 +139,10 @@ public class Monster : Character
 		await MoveSmoothGrid((Vector3Int)end);
 		monsterAI.MoveNextNode();
 	}
+	#endregion
 
-    private void UpdatePath()
+	#region 경로 업데이트 
+	private void UpdatePath()
     {
         // 리더만 경로를 업데이트 하도록 조건 설정
         if(monsterRole == MonsterRole.Follower) return;
@@ -138,20 +155,10 @@ public class Monster : Character
 			repathTimer = 0;
 		}
 	}
+	#endregion
 
-    private void UpdateRunAnimation()
-    {
-        if (!animator.GetBool(hashIsRun) && IsMove)
-        {
-            animator.SetBool(hashIsRun, true);
-        }
-        else if (animator.GetBool(hashIsRun) && !IsMove)
-        {
-            animator.SetBool(hashIsRun, false);
-        }
-    }
-
-    private void UpdateSpriteX()
+	#region 방향 제어 및 공격 관련 함수 
+	private void UpdateSpriteX()
     {
         if(transform.position.x > InGameManager.Instance.GetPlayerTransform().position.x)
         {
@@ -175,13 +182,16 @@ public class Monster : Character
             WaitForAttackCooltime().Forget();
         }
     }
+
     private async UniTaskVoid WaitForAttackCooltime()
     {
         await UniTask.Delay(TimeSpan.FromSeconds(attackCooltime));
         isAttack = true;
     }
+	#endregion
 
-    public void AssignRole(MonsterRole role)
+	#region 제어 함수
+	public void AssignRole(MonsterRole role)
     {
         monsterRole = role;
     }
@@ -191,8 +201,10 @@ public class Monster : Character
         if(lineRenderer != null)
             lineRenderer.enabled = !lineRenderer.enabled;
     }
+	#endregion
 
-    public int GetGroupID()
+	#region Getter 함수 
+	public int GetGroupID()
     {
         return groupID;
     }
@@ -216,4 +228,12 @@ public class Monster : Character
     {
         return lineRenderer;
     }
+	#endregion
+
+	public void PlayRunAnimation()
+	{
+		var current = spineAnimationState.GetCurrent(0);
+		if (current == null || current.Animation.Name != runAnimationName)
+			spineAnimationState.SetAnimation(0, runAnimationName, true);
+	}
 }

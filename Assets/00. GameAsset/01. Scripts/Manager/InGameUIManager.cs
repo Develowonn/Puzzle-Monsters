@@ -125,7 +125,7 @@ public class InGameUIManager : MonoBehaviour
 
 	public async UniTask PlayGameStartTimer(int delay)
 	{
-		await PlayTextCountingAsync(gameStartTimertext, delay, 0, delay);
+		await PlayTextCountingAsync(gameStartTimertext, delay + 1, 0 + 1, delay);
 		if(gameStartTimertext != null)
 			gameStartTimertext.gameObject.SetActive(false);
 	}

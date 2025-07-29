@@ -20,6 +20,13 @@ public class GameManager : Singleton<GameManager>
 	[SerializeField]
 	private bool			isGroupSystem;
 
+	private void Start()
+	{
+		#if !UNITY_EDITOR
+			Application.targetFrameRate = 360;
+		#endif
+	}
+
 	public float GetRepathInterval()
 	{
 		float repathInterval = this.repathInterval + Random.Range(repathIntervalOffsetRange.x, repathIntervalOffsetRange.y);

@@ -6,6 +6,7 @@ using UnityEngine;
 
 // # Etc
 using Cysharp.Threading.Tasks;
+using Spine.Unity;
 
 public class Player : Character
 {
@@ -13,24 +14,39 @@ public class Player : Character
     private int      maxLifeCount;
     [SerializeField]
     private int      invincibilityDuration;
-    private int      currentLifeCount;
 
-    private bool     isInvincibility;
-    private int      hashOnDie;
+    [Header("Animation")]
+	[SerializeField] [SpineAnimation]
+	private string    idleAnimationName;
+	[SerializeField] [SpineAnimation]
+	private string    runAnimationName;
+	[SerializeField] [SpineAnimation]
+	private string    deadAnimationName;
 
-    private Animator animator;
+	private bool     isInvincibility;
+	private int      currentLifeCount;
+
+    private SkeletonAnimation    skeletonAnimation;
+    private Spine.AnimationState spineAnimationState;
 
     // 읽기전용 프로퍼티
     public int       CurrentLifeCount => currentLifeCount;
 
     private void Awake()
     {
-        animator  = GetComponent<Animator>();
-		hashOnDie = Animator.StringToHash("OnDie");
-		currentLifeCount = maxLifeCount;
+		currentLifeCount    = maxLifeCount;
+        InitializeAnimation();
 	}
 
-    private async UniTaskVoid ActivateInvincibility()
+    private void InitializeAnimation()
+    {
+		skeletonAnimation   = GetComponent<SkeletonAnimation>();
+		spineAnimationState = skeletonAnimation.AnimationState;
+
+		PlayIdleAniamtion();
+	}
+
+	private async UniTaskVoid ActivateInvincibility()
     {
         isInvincibility = true;
         await UniTask.Delay(TimeSpan.FromSeconds(invincibilityDuration));
@@ -61,6 +77,27 @@ public class Player : Character
         InGameUIManager.Instance.ActivateGameOverPanel();
 
         IsDie = true;
-        animator.SetTrigger(hashOnDie);
+        PlayDieAnimation();
     }
+
+    public void PlayRunAnimation()
+    {
+        var current = spineAnimationState.GetCurrent(0);
+        if (current == null || current.Animation.Name != runAnimationName)
+			spineAnimationState.SetAnimation(0, runAnimationName, true);
+    }
+
+    public void PlayIdleAniamtion()
+    {
+		var current = spineAnimationState.GetCurrent(0);
+		if (current == null || current.Animation.Name != idleAnimationName)
+			spineAnimationState.SetAnimation(0, idleAnimationName, true);
+	}
+
+    public void PlayDieAnimation()
+    {
+		var current = spineAnimationState.GetCurrent(0);
+		if (current == null || current.Animation.Name != deadAnimationName)
+			spineAnimationState.SetAnimation(0, deadAnimationName, true);
+	}
 }

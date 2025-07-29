@@ -10,15 +10,11 @@ public class PlayerMovement : MonoBehaviour
 
     private int      hashIsRun;
 
-    private Animator animator;
     private Player   player;
 
     private void Awake()
     {
         player   = GetComponent<Player>();
-        animator = GetComponent<Animator>();
-
-        hashIsRun = Animator.StringToHash("IsRun");
     }
 
     private void Start()
@@ -77,15 +73,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateRunAnimation()
     {
-        if (movementDirection == Vector3.zero && animator.GetBool(hashIsRun))
+        if (movementDirection == Vector3.zero)
         {
-            animator.SetBool(hashIsRun, false);
+			player.PlayIdleAniamtion();
         }
-        else if (movementDirection != Vector3.zero && !animator.GetBool(hashIsRun))
+        else if (movementDirection != Vector3.zero)
         {
-            animator.SetBool(hashIsRun, true);
-        }
-    }
+			player.PlayRunAnimation();
+		}
+	}
 
     private void UpdateSpriteX()
     {
